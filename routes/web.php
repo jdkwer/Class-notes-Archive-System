@@ -7,7 +7,12 @@ use App\Http\Controllers\NoteController;
 
 use App\Http\Middleware\AdminMiddleware;
 
+use Illuminate\Support\Facades\Auth;
+
 Route::get('/dashboard', function () {
+    if (Auth::user() && Auth::user()->is_admin) {
+        return redirect()->route('admin.dashboard');
+    }
     return redirect()->route('subjects.index');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
