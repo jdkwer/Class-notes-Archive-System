@@ -1,14 +1,28 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container mx-auto px-4">
-    <h1 class="text-3xl font-bold mb-4">Admin Dashboard</h1>
-    <p>Welcome to the admin dashboard. Only users with admin privileges can access this page.</p>
+<div class="py-12">
+    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div class="bg-white shadow rounded-lg p-6">
+            <h1 class="text-3xl font-bold text-gray-800 mb-6">
+                Admin Dashboard
+            </h1>
+            <p class="text-gray-600 mb-8">
+                Only users with admin privileges can access this page.
+            </p>
 
-    <div class="mt-6">
-        <a href="{{ route('users.index') }}" class="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700">
-            Manage Users
-        </a>
+            <div class="mb-8">
+                <a href="{{ route('admin.users.index') }}"
+                   class="inline-block px-6 py-3 bg-indigo-300 text-indigo-900 font-semibold rounded-lg shadow hover:bg-indigo-400 transition duration-300">
+                    Manage Users
+                </a>
+            </div>
+
+            <div>
+                <h2 class="text-2xl font-semibold text-gray-800 mb-2">Statistics</h2>
+                <p class="text-lg text-gray-600">Total Users: <span class="font-bold">{{ $userCount }}</span></p>
+            </div>
+        </div>
     </div>
 </div>
 @endsection
