@@ -1,12 +1,10 @@
 <?php
-// FILE: app/Http/Controllers/SubjectController.php
-// UPDATED: User authorization, search functionality
-
 namespace App\Http\Controllers;
 
 use App\Models\Subject;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth; // Import Auth facade
+use Illuminate\Validation\Rule; // Correct import for Rule
 
 class SubjectController extends Controller
 {
@@ -51,7 +49,7 @@ class SubjectController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255|unique:subjects,name,NULL,id,user_id,' . Auth::id(), // Ensure name is unique per user
+            'name' => 'required|string|max:255|unique:subjects,name,NULL,id,user_id,' . Auth::id(),
             'description' => 'nullable|string',
         ]);
 
