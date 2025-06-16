@@ -59,6 +59,8 @@
         </button>
     </form>
 
+    @include('profile.partials.delete-user-form')
+
     <script>
         document.getElementById('profileForm').addEventListener('submit', function(event) {
             event.preventDefault();
