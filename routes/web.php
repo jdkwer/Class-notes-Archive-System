@@ -38,10 +38,10 @@ Route::middleware(['auth'])->group(function () {
 use App\Http\Controllers\AdminUserController;
 
 // Admin routes protected by auth and admin middleware
-Route::middleware(['auth', AdminMiddleware::class])->prefix('admin')->group(function () {
-    Route::get('/', function () {
-        return view('admin.dashboard');
-    })->name('admin.dashboard');
+use App\Http\Controllers\AdminDashboardController;
+
+Route::middleware(['auth', AdminMiddleware::class])->prefix('admin')->as('admin.')->group(function () {
+    Route::get('/', [AdminDashboardController::class, 'index'])->name('dashboard');
 
     // Admin user management routes
     Route::resource('users', AdminUserController::class)->except(['show', 'create', 'store']);
