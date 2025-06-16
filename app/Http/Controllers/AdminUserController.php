@@ -29,11 +29,18 @@ class AdminUserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        $request->validate([
+        $rules = [
+            'name' => 'required|string|max:255',
             'is_admin' => 'required|boolean',
-        ]);
+            'email' => 'required|email|unique:users,email,' . $user->id,
+        ];
 
-        $user->is_admin = $request->input('is_admin');
+        $validated = $request->validate($rules);
+
+        $user->is_admin = (bool) $validated['is_admin'];
+        $user->email = $validated['email'];
+        $user->name = $validated['name'];
+
         $user->save();
 
         return redirect()->route('admin.users.index')->with('success', 'User updated successfully.');
