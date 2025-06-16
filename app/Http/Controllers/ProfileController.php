@@ -2,59 +2,66 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ProfileUpdateRequest;
-use Illuminate\Http\RedirectResponse;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redirect;
-use Illuminate\View\View;
+use Illuminate\Validation\Rule;
 
 class ProfileController extends Controller
 {
     /**
-     * Display the user's profile form.
+     * Show the form for editing the authenticated user's profile.
      */
-    public function edit(Request $request): View
+    public function edit()
     {
-        return view('profile.edit', [
-            'user' => $request->user(),
-        ]);
+        /** @var User $user */
+        $user = Auth::user();
+        return view('profile.edit', compact('user'));
     }
 
     /**
-     * Update the user's profile information.
+     * Update the authenticated user's profile.
      */
-    public function update(ProfileUpdateRequest $request): RedirectResponse
+    public function update(Request $request)
     {
-        $request->user()->fill($request->validated());
+        /** @var User $user */
+        $user = Auth::user();
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
+        $rules = [
+            'name' => ['sometimes', 'string', 'max:255'],
+            'email' => ['sometimes', 'email', Rule::unique('users')->ignore($user->id)],
+            'profile_picture' => ['nullable', 'image', 'max:2048'], // max 2MB
+        ];
+
+        $validated = $request->validate($rules);
+
+        $emailChanged = false;
+
+        if (array_key_exists('name', $validated)) {
+            $user->name = $validated['name'];
         }
 
-        $request->user()->save();
+        if (array_key_exists('email', $validated)) {
+            if ($user->email !== $validated['email']) {
+                $emailChanged = true;
+            }
+            $user->email = $validated['email'];
+        }
 
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
-    }
+        if ($request->hasFile('profile_picture')) {
+            $path = $request->file('profile_picture')->store('profile_pictures', 'public');
+            $user->profile_picture = $path;
+        }
 
-    /**
-     * Delete the user's account.
-     */
-    public function destroy(Request $request): RedirectResponse
-    {
-        $request->validateWithBag('userDeletion', [
-            'password' => ['required', 'current_password'],
-        ]);
+        $user->save();
 
-        $user = $request->user();
+        if ($request->input('logout_after_update') === '1' && $emailChanged) {
+            Auth::logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+            return redirect()->route('login')->with('success', 'Profile updated. Please log in again.');
+        }
 
-        Auth::logout();
-
-        $user->delete();
-
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-
-        return Redirect::to('/');
+        return redirect()->route('profile.edit')->with('success', 'Profile updated successfully.');
     }
 }
