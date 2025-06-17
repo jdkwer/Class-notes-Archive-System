@@ -41,9 +41,9 @@
         <div class="mb-4 flex flex-col items-center">
             <label for="profile_picture" class="block text-gray-700 font-semibold mb-2">Profile Picture</label>
             @if ($user->profile_picture)
-                <img id="profilePicturePreview" src="{{ asset('storage/' . $user->profile_picture) }}" alt="Profile Picture" class="mb-2 w-32 h-32 object-cover rounded-full">
+<img id="profilePicturePreview" src="{{ asset('storage/' . $user->profile_picture) }}" alt="Profile Picture" class="mb-2 w-20 h-20 object-cover rounded-full">
             @else
-                <div id="profilePicturePreview" class="mb-2 w-32 h-32 bg-gray-200 rounded-full flex items-center justify-center text-gray-500">
+                <div id="profilePicturePreview" class="mb-2 w-20 h-20 bg-gray-200 rounded-full flex items-center justify-center text-gray-500">
                     No Image
                 </div>
             @endif
@@ -91,7 +91,7 @@
                         img.id = 'profilePicturePreview';
                         img.src = e.target.result;
                         img.alt = 'Profile Picture';
-                        img.className = 'mb-2 w-32 h-32 object-cover rounded-full';
+img.className = 'mb-2 w-20 h-20 object-cover rounded-full';
                         profilePicturePreview.replaceWith(img);
                     }
                 };
