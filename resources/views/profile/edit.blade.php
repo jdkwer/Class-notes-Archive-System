@@ -41,9 +41,9 @@
         <div class="mb-4 flex flex-col items-center">
             <label for="profile_picture" class="block text-gray-700 font-semibold mb-2">Profile Picture</label>
             @if ($user->profile_picture)
-                <img src="{{ asset('storage/' . $user->profile_picture) }}" alt="Profile Picture" class="mb-2 w-32 h-32 object-cover rounded-full">
+                <img id="profilePicturePreview" src="{{ asset('storage/' . $user->profile_picture) }}" alt="Profile Picture" class="mb-2 w-32 h-32 object-cover rounded-full">
             @else
-                <div class="mb-2 w-32 h-32 bg-gray-200 rounded-full flex items-center justify-center text-gray-500">
+                <div id="profilePicturePreview" class="mb-2 w-32 h-32 bg-gray-200 rounded-full flex items-center justify-center text-gray-500">
                     No Image
                 </div>
             @endif
@@ -51,6 +51,8 @@
                 Change Profile Picture
             </label>
             <input type="file" name="profile_picture" id="profile_picture" accept="image/*" class="hidden" />
+            <p class="mt-2 text-sm text-gray-600">Select an image file to upload as your profile picture.</p>
+            {{-- <p class="mt-1 text-sm text-gray-600">Profile picture path: {{ $user->profile_picture }}</p> --}}
         </div>
 
         <button type="submit"
@@ -70,6 +72,31 @@
                 document.getElementById('logout_after_update').value = '0';
             }
             this.submit();
+        });
+
+        // Image preview before upload
+        const profilePictureInput = document.getElementById('profile_picture');
+        const profilePicturePreview = document.getElementById('profilePicturePreview');
+
+        profilePictureInput.addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    if (profilePicturePreview.tagName.toLowerCase() === 'img') {
+                        profilePicturePreview.src = e.target.result;
+                    } else {
+                        // Replace the div with an img element
+                        const img = document.createElement('img');
+                        img.id = 'profilePicturePreview';
+                        img.src = e.target.result;
+                        img.alt = 'Profile Picture';
+                        img.className = 'mb-2 w-32 h-32 object-cover rounded-full';
+                        profilePicturePreview.replaceWith(img);
+                    }
+                };
+                reader.readAsDataURL(file);
+            }
         });
     </script>
 </div>
