@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 
 class ProfileController extends Controller
@@ -30,7 +31,7 @@ class ProfileController extends Controller
         $rules = [
             'name' => ['sometimes', 'string', 'max:255'],
             'email' => ['sometimes', 'email', Rule::unique('users')->ignore($user->id)],
-            'profile_picture' => ['nullable', 'image', 'max:2048'], // max 2MB
+            'profile_picture' => ['nullable', 'image', 'max:1024'], // max 1MB
         ];
 
         $validated = $request->validate($rules);
@@ -72,6 +73,14 @@ class ProfileController extends Controller
     {
         /** @var User $user */
         $user = Auth::user();
+
+        $request->validate([
+            'password' => ['required'],
+        ]);
+
+        if (!Hash::check($request->password, $user->password)) {
+            return back()->withErrors(['password' => 'The provided password does not match your current password.']);
+        }
 
         Auth::logout();
 
