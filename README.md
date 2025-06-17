@@ -1,61 +1,101 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Laravel Project Setup and Running Instructions
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+This project is built with the Laravel PHP framework. Below are the instructions to get the project up and running on your local machine.
 
-## About Laravel
+## Prerequisites
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Make sure you have the following software installed:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- **PHP** (version 8.0 or higher recommended)  
+  [Download PHP](https://www.php.net/downloads)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- **Composer** (PHP dependency manager)  
+  [Get Composer](https://getcomposer.org/download/)
 
-## Learning Laravel
+- **Node.js and npm** (for frontend asset management)  
+  [Download Node.js](https://nodejs.org/en/download/)
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+- **Database** (MySQL, MariaDB, PostgreSQL, or SQLite)  
+  Ensure you have a database server running and accessible.
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## Installation Steps
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+1. **Clone the repository** (if you haven't already)  
+   ```bash
+   git clone <repository-url>
+   cd <repository-directory>
+   ```
 
-## Laravel Sponsors
+2. **Install PHP dependencies**  
+   Run the following command to install all PHP packages required by Laravel:  
+   ```bash
+   composer install
+   ```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+3. **Install Node.js dependencies**  
+   Run the following command to install frontend dependencies:  
+   ```bash
+   npm install
+   ```
 
-### Premium Partners
+4. **Set up environment variables**  
+   Copy the example environment file and generate an application key:  
+   ```bash
+   cp .env.example .env
+   php artisan key:generate
+   ```
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+5. **Configure your database**  
+   Edit the `.env` file to set your database connection details:  
+   ```
+   DB_CONNECTION=mysql
+   DB_HOST=127.0.0.1
+   DB_PORT=3306
+   DB_DATABASE=your_database_name
+   DB_USERNAME=your_database_user
+   DB_PASSWORD=your_database_password
+   ```
 
-## Contributing
+6. **Run database migrations**  
+   This will create the necessary tables in your database:  
+   ```bash
+   php artisan migrate
+   ```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+7. **(Optional) Seed the database**  
+   If your project includes seeders to populate initial data, run:  
+   ```bash
+   php artisan db:seed
+   ```
 
-## Code of Conduct
+8. **Build frontend assets**  
+   For development, run:  
+   ```bash
+   npm run dev
+   ```  
+   For production build, run:  
+   ```bash
+   npm run build
+   ```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+9. **Run the development server**  
+   Start the Laravel development server:  
+   ```bash
+   php artisan serve
+   ```  
+   By default, the server will be accessible at [http://localhost:8000](http://localhost:8000).
 
-## Security Vulnerabilities
+## Additional Notes
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+- If you make changes to frontend assets, remember to re-run `npm run dev` or `npm run build`.
+- For more information on Laravel, visit the [official documentation](https://laravel.com/docs).
+- Make sure your PHP installation has the required extensions enabled (e.g., OpenSSL, PDO, Mbstring, Tokenizer, XML, Ctype, JSON, BCMath).
 
-## License
+## Troubleshooting
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+- If you encounter permission issues, ensure your storage and bootstrap/cache directories are writable.
+- If migrations fail, verify your database credentials and that the database server is running.
+
+---
+
+This should help you get started with running the Laravel project locally.
